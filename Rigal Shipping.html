@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -304,8 +304,8 @@
       <a href="#routes" data-i18n="nav.routes">Routes</a>
       <a href="#contact" class="nav-cta" data-i18n="nav.quote">Get a Quote</a>
       <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">AR</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">AR</button>
       </div>
     </div>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -379,8 +379,8 @@
           <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,200,232,0.05);border:1px solid rgba(0,200,232,0.1);border-radius:3px;">
             <span style="font-size:10px;color:var(--gray);letter-spacing:0.1em;text-transform:uppercase;" data-i18n="panel.ops">Operations</span>
             <span style="display:flex;align-items:center;gap:7px;font-size:11px;color:#4ade80;font-weight:500;">
-              <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse 2s infinite;"></span>
-              24 / 7 LIVE
+              <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse 2s infinite;flex-shrink:0;"></span>
+              <span data-i18n="panel.live">24/7 LIVE</span>
             </span>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,200,232,0.05);border:1px solid rgba(0,200,232,0.1);border-radius:3px;">
@@ -645,7 +645,7 @@ const T = {
     "hero.desc":"We connect Egypt's ports to the world's trade lanes. Fifty years of maritime experience, and a network that runs from the Red Sea to the Gulf of Aden, the Mediterranean to beyond.",
     "hero.cta1":"Request a Quote","hero.cta2":"View Our Routes",
     "stats.years":"Years of expertise","stats.hubs":"Regional hubs","stats.dest":"Destinations",
-    "panel.sub":"SHIPPING CO.","panel.ops":"Operations","panel.routes":"Active Routes","panel.dest":"Destinations","panel.est":"Est.","panel.since":"Since 1975",
+    "panel.sub":"SHIPPING CO.","panel.ops":"Operations","panel.live":"24/7 LIVE","panel.routes":"Active Routes","panel.dest":"Destinations","panel.est":"Est.","panel.since":"Since 1975",
     "svc.eyebrow":"What We Do","svc.title":"Comprehensive maritime<br/>services, handled","svc.sub":"From vessel representation to cargo logistics — every link in your supply chain, managed with precision.",
     "svc1.title":"Liner Agency Service","svc1.desc":"Full representation for liner shipping companies at Egyptian and regional ports — vessel schedules, port calls, documentation, and liaison with port authorities.",
     "svc2.title":"Dry &amp; Liquid Bulk Services","svc2.desc":"Specialized handling of bulk commodities — grain, coal, minerals, and liquid bulk including petroleum products and chemicals.",
@@ -696,7 +696,7 @@ const T = {
     "hero.desc":"نَصِل موانئ مصر بمسارات التجارة العالمية. خمسون عاماً من الخبرة البحرية، وشبكة تمتد من البحر الأحمر إلى خليج عدن، ومن المتوسط إلى ما وراءهما.",
     "hero.cta1":"اطلب عرض سعر","hero.cta2":"تصفّح مساراتنا",
     "stats.years":"عاماً من الخبرة","stats.hubs":"مراكز إقليمية","stats.dest":"وجهة عالمية",
-    "panel.sub":"للشحن","panel.ops":"العمليات","panel.routes":"خطوط نشطة","panel.dest":"وجهة","panel.est":"تأسست","panel.since":"منذ ١٩٧٥",
+    "panel.sub":"للشحن","panel.ops":"العمليات","panel.live":"24/7","panel.routes":"خطوط نشطة","panel.dest":"وجهة","panel.est":"تأسست","panel.since":"منذ 1975",
     "svc.eyebrow":"خدماتنا","svc.title":"حلول بحرية متكاملة.<br/>بإتقانٍ لا يَعرف التهاون.","svc.sub":"من رسوّ السفينة إلى تسليم الحاوية. كل حلقة في سلسلة إمدادك، بأيدٍ خبيرة.",
     "svc1.title":"وكالة الخطوط الملاحية","svc1.desc":"تمثيل كامل لشركات الخطوط الملاحية في الموانئ المصرية والإقليمية. جداول السفن، الرسو، التوثيق، والتنسيق مع سلطات الموانئ.",
     "svc2.title":"البضائع الصبّ، جافة وسائلة","svc2.desc":"مناولة متخصصة للحبوب والفحم والمعادن، والمشتقات النفطية والمواد الكيميائية السائلة.",
@@ -708,10 +708,10 @@ const T = {
     "svc8.title":"وكالة الموانئ","svc8.desc":"خدمة الميناء كاملة: التموين، التخليص، الإشراف على البضائع، حسابات الصرف، والتنسيق مع السلطات.",
     "svc9.title":"تبديل الطاقم","svc9.desc":"إركاب وإنزال سَلِس للطاقم: التأشيرات، النقل، السكن، والمساعدة الطبية.",
     "svc10.title":"البنكرة والتموين","svc10.desc":"تأمين الوقود، تنسيق التزويد، ودعم لوجستي للسفن العابرة في البحر الأحمر وخليج عدن.",
-    "trust1":"مسجَّلة في النظام البحري المصري","trust2":"معتمدة ISO 9001:2015","trust3":"عضو FIATA لوكلاء الشحن","trust4":"تأسست ١٩٧٥ · مقر مصر ٢٠٢٦","trust5":"عمليات على مدار الساعة",
+    "trust1":"مسجَّلة في النظام البحري المصري","trust2":"معتمدة ISO 9001:2015","trust3":"عضو FIATA لوكلاء الشحن","trust4":"تأسست 1975 · مقر مصر 2026","trust5":"عمليات على مدار الساعة",
     "about.eyebrow":"إرثنا","about.title":"خمسةُ عقود<br/><em>في البحر.</em><br/><span>لا في الكتب.</span>",
-    "about.p1":"وُلدت ريجال من عائلة بحرية، تجوب أهم مسارات التجارة منذ عام ١٩٧٥. بدأنا وكالةً إقليمية، فصِرنا مجموعةً لوجستيةً متعددة الممرات، تمتد شراكاتها من شبه الجزيرة العربية إلى قرن أفريقيا.",
-    "about.p2":"في عام ٢٠٢٦، نُطلق مقرّنا الجديد في مصر. علامةٌ موحَّدة، ومنصةٌ واحدة، والتزامٌ واحد: ننقل ما يَهمّ. بلا تأخير. بلا إخفاق.",
+    "about.p1":"وُلدت ريجال من عائلة بحرية، تجوب أهم مسارات التجارة منذ عام 1975. بدأنا وكالةً إقليمية، فصِرنا مجموعةً لوجستيةً متعددة الممرات، تمتد شراكاتها من شبه الجزيرة العربية إلى قرن أفريقيا.",
+    "about.p2":"في عام 2026، نُطلق مقرّنا الجديد في مصر. علامةٌ موحَّدة، ومنصةٌ واحدة، والتزامٌ واحد: ننقل ما يَهمّ. بلا تأخير. بلا إخفاق.",
     "pillar1.title":"خبرة إقليمية لا تُضاهى","pillar1.desc":"معرفة عميقة بممرات البحر الأحمر والسويس وخليج عدن. خمسون عاماً من العمل، لا من القراءة.",
     "pillar2.title":"شراكات حقيقية","pillar2.desc":"شركاؤنا في دبي وجيبوتي واليمن حلفاءُ على المدى الطويل، لا وكلاءَ في صفقات. نتحرّك معاً، ونُنجز معاً.",
     "pillar3.title":"موقع مصر الاستراتيجي","pillar3.desc":"نعمل من قناة السويس، أهمِّ نقطةِ عبورٍ بحرية في العالم. ميزة لا يُوفّرها أي مركز آخر.",
@@ -728,7 +728,7 @@ const T = {
     "contact.eyebrow":"تواصل معنا","contact.title":"جاهزون لنقل<br/>بضاعتك؟","contact.desc":"حاوية كاملة، أو شحنة جزئية، أو مشروع متعدّد الموانئ. فريقنا جاهز ليبني الحلّ على مقاس متطلباتك.",
     "contact.hq.label":"المقر","contact.hq.val":"مصر · الإسكندرية وبورسعيد",
     "contact.net.label":"الشبكة","contact.net.val":"دبي · جيبوتي · عدن، اليمن",
-    "contact.ops.label":"العمليات","contact.ops.val":"٢٤/٧ · ٣٦٥ يوماً في السنة",
+    "contact.ops.label":"العمليات","contact.ops.val":"24/7 · 365 يوماً في السنة",
     "contact.email.label":"البريد","contact.quote":"نحن نُبحر في هذه المياه قبل أن يُؤسَّس معظم منافسينا.",
     "form.fname":"الاسم الأول","form.fname.ph":"أحمد","form.lname":"اسم العائلة","form.lname.ph":"حسن",
     "form.company":"الشركة","form.company.ph":"اسم شركتك","form.email":"البريد الإلكتروني","form.email.ph":"you@company.com",
@@ -736,9 +736,9 @@ const T = {
     "form.msg":"تفاصيل إضافية","form.msg.ph":"نوع البضاعة، الحجم، التوقيت...","form.submit":"أرسل الطلب ◈","form.success":"وصل طلبُك. سيردُّ فريقنا خلال يوم عمل.",
     "footer.tagline":"أكثر من خمسين عاماً في البحر. نعمل من مصر إلى العالم: عبر البحر الأحمر، والمتوسط، وما وراءهما.",
     "footer.services":"الخدمات","footer.network":"الشبكة","footer.company":"الشركة",
-    "footer.copy":"© ٢٠٢٦ شركة ريجال للشحن. جميع الحقوق محفوظة. مصر · دبي · جيبوتي · اليمن",
+    "footer.copy":"© 2026 شركة ريجال للشحن. جميع الحقوق محفوظة. مصر · دبي · جيبوتي · اليمن",
     "footer.privacy":"سياسة الخصوصية","footer.terms":"شروط الخدمة",
-    "ticker":["الشحن البحري","بورسعيد","الإسكندرية","جبل علي · دبي","ميناء جيبوتي","عدن · اليمن","التخليص الجمركي","البضائع الصبّ","لوجستيات الحاويات","ممر البحر الأحمر","مسارات المتوسط","أكثر من ٥٠ عاماً من التميّز","وكالة الخطوط الملاحية","تبديل الطاقم","البنكرة والتموين"]
+    "ticker":["الشحن البحري","بورسعيد","الإسكندرية","جبل علي · دبي","ميناء جيبوتي","عدن · اليمن","التخليص الجمركي","البضائع الصبّ","لوجستيات الحاويات","ممر البحر الأحمر","مسارات المتوسط","أكثر من 50 عاماً من التميّز","وكالة الخطوط الملاحية","تبديل الطاقم","البنكرة والتموين"]
   }
 };
 
@@ -1118,7 +1118,7 @@ const SERVICE_ICONS = [
 ];
 
 // ── LANGUAGE ENGINE ────────────────────────────
-let currentLang = localStorage.getItem('lang') || 'en';
+let currentLang = localStorage.getItem('lang') || 'ar';
 
 function t(key) { return T[currentLang][key] || T['en'][key] || key; }
 
