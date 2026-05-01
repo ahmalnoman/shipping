@@ -258,7 +258,25 @@
     .map-corner.tr { top:8px; right:8px; border-left:none; border-bottom:none; }
     .map-corner.bl { bottom:8px; left:8px; border-right:none; border-top:none; }
     .map-corner.br { bottom:8px; right:8px; border-left:none; border-top:none; }
-    .map-svg { display:block; width:100%; height:auto; padding:48px 0; }
+    .map-svg-scroll { width:100%; padding:48px 0; overflow:hidden; }
+    .map-svg { display:block; width:100%; height:auto; }
+    .map-scroll-hint { display:none; }
+    @media(max-width:900px){
+      .map-svg-scroll { overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; padding:56px 0 40px; scrollbar-width:thin; scrollbar-color:rgba(212,167,60,0.4) transparent; }
+      .map-svg-scroll::-webkit-scrollbar { height:4px; }
+      .map-svg-scroll::-webkit-scrollbar-thumb { background:rgba(212,167,60,0.4); border-radius:2px; }
+      .map-svg { min-width:1100px; height:auto; }
+      .map-scroll-hint { display:block; position:absolute; bottom:46px; right:14px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.18em; color:rgba(245,185,66,0.75); text-transform:uppercase; pointer-events:none; z-index:6; animation:hintPulse 2.4s ease-in-out infinite; }
+      [dir="rtl"] .map-scroll-hint { right:auto; left:14px; }
+      @keyframes hintPulse { 0%,100%{opacity:0.4; transform:translateX(0)} 50%{opacity:1; transform:translateX(-4px)} }
+      .map-hud-top, .map-hud-bot { font-size:9px; letter-spacing:0.16em; padding:10px 14px; }
+      .map-corner { width:14px; height:14px; }
+    }
+    @media(max-width:600px){
+      .map-svg { min-width:1000px; }
+      .map-hud-top span:nth-child(3) { display:none; }
+      .map-hud-bot span:nth-child(3) { display:none; }
+    }
 
     /* ── TRUST BAR ── */
     .trust-bar { background:var(--navy); border-top:1px solid rgba(0,102,255,0.1); border-bottom:1px solid rgba(0,102,255,0.1); padding:18px 0; overflow:hidden; }
@@ -325,7 +343,7 @@
     /* ── RESPONSIVE ── */
     @media(max-width:1100px){ .services-grid{grid-template-columns:repeat(3,1fr)} }
     @media(max-width:900px){ .hero-inner{grid-template-columns:1fr} .hero-panel{display:none} .about-inner{grid-template-columns:1fr;gap:56px} .contact-inner{grid-template-columns:1fr;gap:56px} .ports-grid{grid-template-columns:repeat(2,1fr)} .footer-top{grid-template-columns:1fr 1fr} .services-grid{grid-template-columns:repeat(2,1fr)} }
-    @media(max-width:600px){ .hero-inner{padding:0 20px} .container{padding:0 20px} .section-gap{padding:80px 0} .services-grid{grid-template-columns:1fr} .ports-grid{grid-template-columns:1fr} .footer-top{grid-template-columns:1fr} .form-row{grid-template-columns:1fr} .nav-links{display:none} .hamburger{display:flex} .hero-stats{flex-wrap:wrap;gap:20px} }
+    @media(max-width:600px){ .hero-inner{padding:0 20px 64px;justify-content:flex-end} .container{padding:0 20px} .section-gap{padding:80px 0} .services-grid{grid-template-columns:1fr} .ports-grid{grid-template-columns:1fr} .footer-top{grid-template-columns:1fr} .form-row{grid-template-columns:1fr} .nav-links{display:none} .hamburger{display:flex} .hero-stats{flex-wrap:wrap;gap:20px} .hero-actions{flex-direction:column;width:100%} .hero-actions .btn-primary,.hero-actions .btn-ghost{width:100%;text-align:center} }
   </style>
 </head>
 <body>
@@ -555,6 +573,7 @@
       </div>
       <div class="map-corner tl"></div><div class="map-corner tr"></div>
       <div class="map-corner bl"></div><div class="map-corner br"></div>
+      <div class="map-svg-scroll">
       <svg class="map-svg" viewBox="0 0 1600 720" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="dotgrid" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
@@ -814,6 +833,8 @@
           </rect>
         </g>
       </svg>
+      </div>
+      <div class="map-scroll-hint" aria-hidden="true">↔ swipe</div>
       <div class="map-hud-bot">
         <span>04 HUBS · 24 PORTS · 10 ROUTES</span>
         <span>EGYPT → THE WORLD</span>
