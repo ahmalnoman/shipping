@@ -441,23 +441,19 @@
 
 <!-- ═══ HERO ═══ -->
 <section id="hero">
-  <div class="hero-video-wrap">
-    <video id="bg-video" autoplay muted loop playsinline preload="metadata" poster="brand/png/sbh-mark-1024.png">
-      <source id="bg-video-src" src="assets/hero-bg.mp4" type="video/mp4"/>
+  <div class="hero-video-wrap" style="background:url('brand/png/sbh-mark-1024.png') center/cover no-repeat var(--void);">
+    <video id="bg-video" autoplay muted loop playsinline preload="auto" poster="brand/png/sbh-mark-1024.png">
+      <source id="bg-video-src" type="video/mp4"/>
     </video>
   </div>
   <script>
   (function(){
-    if (window.matchMedia && window.matchMedia('(max-width: 900px)').matches) {
-      var v = document.getElementById('bg-video');
-      if (v) {
-        var s = document.getElementById('bg-video-src');
-        if (s) s.removeAttribute('src');
-        v.removeAttribute('autoplay');
-        v.removeAttribute('preload');
-        try { v.load(); } catch(e){}
-        v.remove();
-      }
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+    var s = document.getElementById('bg-video-src');
+    var v = document.getElementById('bg-video');
+    if (s && v) {
+      s.src = isMobile ? 'assets/hero-bg-mobile.mp4' : 'assets/hero-bg.mp4';
+      v.load();
     }
   })();
   </script>
