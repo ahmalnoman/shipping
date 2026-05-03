@@ -156,8 +156,8 @@
     .ticker::before,.ticker::after { content:''; position:absolute; top:0; bottom:0; width:140px; z-index:2; }
     .ticker::before { left:0; background:linear-gradient(90deg,var(--void),transparent); }
     .ticker::after  { right:0; background:linear-gradient(-90deg,var(--void),transparent); }
-    .ticker-inner { display:flex; white-space:nowrap; animation:ticker 38s linear infinite; }
-    [dir="rtl"] .ticker-inner { animation:ticker-rtl 38s linear infinite; }
+    .ticker-inner { display:flex; white-space:nowrap; animation:ticker 14s linear infinite; }
+    [dir="rtl"] .ticker-inner { animation:ticker-rtl 14s linear infinite; }
     .ticker:hover .ticker-inner { animation-play-state:paused; }
     .ticker-item { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; padding:0 28px; transition:opacity 0.2s; }
     .ticker-item:hover { opacity:0.6; }
