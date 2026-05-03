@@ -156,9 +156,9 @@
     .ticker::before,.ticker::after { content:''; position:absolute; top:0; bottom:0; width:140px; z-index:2; }
     .ticker::before { left:0; background:linear-gradient(90deg,var(--void),transparent); }
     .ticker::after  { right:0; background:linear-gradient(-90deg,var(--void),transparent); }
-    .ticker-inner { display:flex; white-space:nowrap; animation:ticker 14s linear infinite; }
+    .ticker-inner { display:flex; white-space:nowrap; animation:ticker 14s linear infinite; will-change:transform; transform:translateZ(0); backface-visibility:hidden; }
     [dir="rtl"] .ticker-inner { animation:ticker-rtl 14s linear infinite; }
-    .ticker:hover .ticker-inner { animation-play-state:paused; }
+    @media (hover:hover) { .ticker:hover .ticker-inner { animation-play-state:paused; } }
     .ticker-item { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; padding:0 28px; transition:opacity 0.2s; }
     .ticker-item:hover { opacity:0.6; }
     [dir="rtl"] .ticker-item { letter-spacing:0.06em; font-family:'IBM Plex Sans Arabic',sans-serif; }
@@ -352,6 +352,8 @@
     @media(max-width:1100px){ .services-grid{grid-template-columns:repeat(3,1fr)} }
     @media(max-width:900px){ .hero-inner{grid-template-columns:1fr} .hero-panel{display:none} .about-inner{grid-template-columns:1fr;gap:56px} .contact-inner{grid-template-columns:1fr;gap:56px} .ports-grid{grid-template-columns:repeat(2,1fr)} .footer-top{grid-template-columns:1fr 1fr} .services-grid{grid-template-columns:repeat(2,1fr)} }
     @media(max-width:600px){
+      .ticker-inner, [dir="rtl"] .ticker-inner { animation-duration:7s; }
+      .ticker::before, .ticker::after { width:60px; }
       .hero-inner{padding:0 20px 64px;justify-content:flex-end}
       .container{padding:0 20px}
       .section-gap{padding:80px 0}
@@ -440,10 +442,25 @@
 <!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="hero-video-wrap">
-    <video id="bg-video" autoplay muted loop playsinline preload="auto" poster="brand/png/sbh-mark-1024.png">
-      <source src="assets/hero-bg.mp4" type="video/mp4"/>
+    <video id="bg-video" autoplay muted loop playsinline preload="metadata" poster="brand/png/sbh-mark-1024.png">
+      <source id="bg-video-src" src="assets/hero-bg.mp4" type="video/mp4"/>
     </video>
   </div>
+  <script>
+  (function(){
+    if (window.matchMedia && window.matchMedia('(max-width: 900px)').matches) {
+      var v = document.getElementById('bg-video');
+      if (v) {
+        var s = document.getElementById('bg-video-src');
+        if (s) s.removeAttribute('src');
+        v.removeAttribute('autoplay');
+        v.removeAttribute('preload');
+        try { v.load(); } catch(e){}
+        v.remove();
+      }
+    }
+  })();
+  </script>
   <div class="hero-overlay"></div>
   <div class="hero-grid"></div>
   <div class="hero-scan"></div>
