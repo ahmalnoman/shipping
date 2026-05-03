@@ -8,7 +8,7 @@
   <link rel="icon" type="image/x-icon" href="brand/favicon.ico"/>
   <link rel="apple-touch-icon" sizes="180x180" href="brand/apple-touch-icon.png"/>
   <link rel="manifest" href="brand/site.webmanifest"/>
-  <meta name="theme-color" content="#0066ff"/>
+  <meta name="theme-color" content="#1a1f3a"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -43,6 +43,10 @@
     .nav-logo { display: flex; align-items: center; gap: 16px; text-decoration: none; }
     .nav-logo-text { display: flex; flex-direction: column; line-height: 1; }
     .nav-logo-main { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--bone); letter-spacing: 6px; }
+    [dir="rtl"] .nav-logo-main { font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 17px; letter-spacing: 0; }
+    [dir="rtl"] .panel-logoname-main { font-family: 'IBM Plex Sans Arabic', sans-serif; letter-spacing: 0; }
+    .footer-brand-name { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:600; color:var(--bone); letter-spacing:5px; }
+    [dir="rtl"] .footer-brand-name { font-family:'IBM Plex Sans Arabic',sans-serif; font-size:14px; letter-spacing:0; }
     .nav-logo-sub  { font-size: 10px; color: var(--cyan); letter-spacing: 4px; margin-top: 5px; font-weight: 600; }
     [dir="rtl"] .nav-logo-sub { font-size: 10px; letter-spacing: 1px; font-weight: 500; white-space: nowrap; }
     .nav-links { display: flex; align-items: center; gap: 36px; }
@@ -62,8 +66,12 @@
     .lang-btn.active { background:var(--cyan); color:var(--void); }
     .lang-btn:not(.active):hover { background:var(--cyan-dim); color:var(--bone); }
 
-    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
-    .hamburger span { display:block; width:22px; height:1.5px; background:var(--bone); transition:0.3s; }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; z-index:1001; position:relative; }
+    .hamburger span { display:block; width:22px; height:1.5px; background:var(--bone); transition:transform 0.28s ease, opacity 0.2s ease; transform-origin:center; }
+    .hamburger.is-open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+    .hamburger.is-open span:nth-child(2) { opacity:0; }
+    .hamburger.is-open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+    body.menu-open { overflow:hidden; }
 
     /* ── HERO ── */
     #hero { min-height:100vh; display:flex; align-items:center; position:relative; overflow:hidden; }
@@ -343,7 +351,62 @@
     /* ── RESPONSIVE ── */
     @media(max-width:1100px){ .services-grid{grid-template-columns:repeat(3,1fr)} }
     @media(max-width:900px){ .hero-inner{grid-template-columns:1fr} .hero-panel{display:none} .about-inner{grid-template-columns:1fr;gap:56px} .contact-inner{grid-template-columns:1fr;gap:56px} .ports-grid{grid-template-columns:repeat(2,1fr)} .footer-top{grid-template-columns:1fr 1fr} .services-grid{grid-template-columns:repeat(2,1fr)} }
-    @media(max-width:600px){ .hero-inner{padding:0 20px 64px;justify-content:flex-end} .container{padding:0 20px} .section-gap{padding:80px 0} .services-grid{grid-template-columns:1fr} .ports-grid{grid-template-columns:1fr} .footer-top{grid-template-columns:1fr} .form-row{grid-template-columns:1fr} .nav-links{display:none} .hamburger{display:flex} .hero-stats{flex-wrap:wrap;gap:20px} .hero-actions{flex-direction:column;width:100%} .hero-actions .btn-primary,.hero-actions .btn-ghost{width:100%;text-align:center} }
+    @media(max-width:600px){
+      .hero-inner{padding:0 20px 64px;justify-content:flex-end}
+      .container{padding:0 20px}
+      .section-gap{padding:80px 0}
+      .services-grid{grid-template-columns:1fr}
+      .ports-grid{grid-template-columns:1fr}
+      .footer-top{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .hamburger{display:flex}
+      .hero-stats{flex-wrap:wrap;gap:20px}
+      .hero-actions{flex-direction:column;width:100%}
+      .hero-actions .btn-primary,.hero-actions .btn-ghost{width:100%;text-align:center}
+
+      /* ─── Mobile slide-down menu ─── */
+      .nav-links{
+        display:flex; flex-direction:column; align-items:stretch; gap:6px;
+        position:fixed; top:72px; left:0; right:0; bottom:0;
+        padding:32px 28px 28px;
+        background:rgba(244,248,255,0.98);
+        backdrop-filter:blur(24px);
+        -webkit-backdrop-filter:blur(24px);
+        z-index:1000;
+        overflow-y:auto;
+        transform:translateY(-12px);
+        opacity:0; visibility:hidden; pointer-events:none;
+        transition:opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+      }
+      .nav-links.is-open{
+        transform:translateY(0); opacity:1; visibility:visible; pointer-events:auto;
+        transition:opacity .22s ease, transform .22s ease, visibility 0s;
+      }
+      .nav-links a{
+        font-size:18px; font-weight:500;
+        padding:18px 4px;
+        border-bottom:1px solid rgba(0,102,255,0.08);
+        letter-spacing:0.04em;
+      }
+      .nav-links a::after{display:none}
+      .nav-links .nav-cta{
+        margin-top:20px; padding:18px;
+        background:var(--cyan); color:var(--void);
+        text-align:center; border:none; border-radius:2px;
+        font-weight:600; letter-spacing:0.12em;
+      }
+      .nav-links .lang-toggle{
+        margin-top:auto;
+        display:grid; grid-template-columns:1fr 1fr;
+        width:100%; gap:0;
+        border:1px solid rgba(0,102,255,0.2);
+        border-radius:2px; overflow:hidden;
+      }
+      .nav-links .lang-btn{
+        padding:18px 0; font-size:14px; font-weight:600;
+        letter-spacing:0.18em; text-align:center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -352,35 +415,9 @@
 <nav id="main-nav">
   <div class="nav-inner">
     <a href="#hero" class="nav-logo">
-      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#0066ff"/><stop offset="100%" stop-color="#00d4ff"/>
-          </linearGradient>
-          <filter id="glow"><feGaussianBlur stdDeviation="1.2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <!-- Outer ring -->
-        <circle cx="23" cy="23" r="21" stroke="url(#lg1)" stroke-width="1" fill="none" opacity="0.5"/>
-        <!-- Lighthouse beam (radiating) -->
-        <path d="M23 14 L13 5 L33 5 Z" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="0.4" opacity="0.7"/>
-        <!-- Lighthouse top lantern -->
-        <circle cx="23" cy="13" r="2.2" fill="#00d4ff" filter="url(#glow)"/>
-        <rect x="20.5" y="14.5" width="5" height="2" fill="#0066ff"/>
-        <!-- Lighthouse tower (tapers) — also serves as ship's central tower/bridge -->
-        <path d="M19.5 16 L26.5 16 L25.5 28 L20.5 28 Z" fill="rgba(0,102,255,0.18)" stroke="#0066ff" stroke-width="1.1"/>
-        <line x1="19.8" y1="20" x2="26.2" y2="20" stroke="#0066ff" stroke-width="0.5" opacity="0.7"/>
-        <line x1="20" y1="24" x2="26" y2="24" stroke="#0066ff" stroke-width="0.5" opacity="0.7"/>
-        <!-- Cargo ship hull (encloses lighthouse base) -->
-        <path d="M6 28 L40 28 L37 34 L9 34 Z" fill="rgba(0,102,255,0.15)" stroke="#0066ff" stroke-width="1.3"/>
-        <!-- Containers on deck flanking the tower -->
-        <rect x="11" y="25" width="6" height="3" fill="#00d4ff" opacity="0.85"/>
-        <rect x="29" y="25" width="6" height="3" fill="#00d4ff" opacity="0.85"/>
-        <!-- Sea waves (two lines under) -->
-        <path d="M4 38 Q10 36 16 38 Q22 40 28 38 Q34 36 42 38" stroke="#0066ff" stroke-width="1" fill="none" stroke-linecap="round"/>
-        <path d="M6 41 Q12 39.5 18 41 Q24 42.5 30 41 Q36 39.5 40 41" stroke="#00d4ff" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.7"/>
-      </svg>
+      <img src="brand/sbh-logo-mark.svg" alt="SHB Shipping Co." width="46" height="46" style="display:block;"/>
       <div class="nav-logo-text">
-        <span class="nav-logo-main">SHB</span>
+        <span class="nav-logo-main" data-i18n="nav.brand">SHB</span>
         <span class="nav-logo-sub" data-i18n="nav.sub">SHIPPING CO.</span>
       </div>
     </a>
@@ -412,9 +449,9 @@
   <div class="hero-scan"></div>
   <div class="hero-inner">
     <h1 class="hero-title" data-i18n="hero.title">
-      A century of <em>precision.</em> <span>One ocean</span> at a time.
+      New flag. <em>Forty years</em> <span>on the water.</span>
     </h1>
-    <p class="hero-desc" data-i18n="hero.desc">SHB Shipping Co. connects Egypt's major ports to global trade lanes. Backed by over a century of maritime expertise and a network spanning the Red Sea, Gulf of Aden, and beyond.</p>
+    <p class="hero-desc" data-i18n="hero.desc">Egyptian ports to the world. Run by people who've done this for four decades.</p>
     <div class="hero-actions">
       <a href="#contact" class="btn-primary" data-i18n="hero.cta1">Request a Quote</a>
       <a href="#routes" class="btn-ghost" data-i18n="hero.cta2">View Our Routes</a>
@@ -483,7 +520,7 @@
           </div>
         </div>
         <div class="panel-logoname">
-          <div class="panel-logoname-main">SHB</div>
+          <div class="panel-logoname-main" data-i18n="nav.brand">SHB</div>
           <div class="panel-logoname-rule"></div>
           <div class="panel-logoname-sub" data-i18n="panel.sub">SHIPPING CO.</div>
         </div>
@@ -501,7 +538,7 @@
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,102,255,0.05);border:1px solid rgba(0,102,255,0.1);border-radius:3px;">
             <span style="font-size:10px;color:var(--gray);letter-spacing:0.1em;text-transform:uppercase;" data-i18n="panel.est">Est.</span>
-            <span style="font-size:11px;color:var(--gold);font-weight:600;" data-i18n="panel.since">Since 1914</span>
+            <span style="font-size:11px;color:var(--gold);font-weight:600;" data-i18n="panel.since">Day One · 2026</span>
           </div>
         </div>
       </div>
@@ -534,23 +571,23 @@
   <div class="container">
     <div class="about-inner">
       <div class="about-left fade-up">
-        <div class="eyebrow" data-i18n="about.eyebrow">Our Legacy</div>
-        <h2 data-i18n="about.title">Built on<br/><em>eleven decades</em><br/>of the sea</h2>
-        <p data-i18n="about.p1">SHB Shipping Co. was born from a family of maritime professionals who have navigated the world's most critical trade routes since 1914. What started as a regional agency grew into a multi-corridor logistics group with partnerships across the Arabian Peninsula and the Horn of Africa.</p>
-        <p data-i18n="about.p2">In 2026, we launch our new Egypt headquarters, bringing together everything we've built into one unified brand, one platform, and one commitment: to move what matters, without fail.</p>
+        <div class="eyebrow" data-i18n="about.eyebrow">Track Record</div>
+        <h2 data-i18n="about.title">New company.<br/><em>Forty years</em><br/>on the water.</h2>
+        <p data-i18n="about.p1">SHB Shipping Co. is new. The people running it aren't. Four decades on Egypt's coast — every major port, every kind of cargo, every type of vessel. The team has spent a working lifetime on these docks.</p>
+        <p data-i18n="about.p2">We launched SHB in 2026 to put that experience under one modern brand. Lean operation, sharp tools, and leadership that knows where every bollard sits at every Egyptian terminal.</p>
         <div class="pillars">
-          <div class="pillar" style="--pillar-c:#0d8a72;--pillar-c-glow:rgba(13,138,114,0.25)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar1.title">Unmatched regional expertise</h4><p data-i18n="pillar1.desc">Deep knowledge of Red Sea, Suez, and Gulf of Aden corridors, built over 112 years, not learned from a manual.</p></div></div>
-          <div class="pillar" style="--pillar-c:#d4a73c;--pillar-c-glow:rgba(212,167,60,0.28)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar2.title">Genuine partnerships</h4><p data-i18n="pillar2.desc">Our Dubai, Djibouti, and Yemen partners are long-term allies, not transactional agents. We move together.</p></div></div>
-          <div class="pillar" style="--pillar-c:#0066ff;--pillar-c-glow:rgba(0,102,255,0.28)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar3.title">Egypt's strategic position</h4><p data-i18n="pillar3.desc">Operating from the Suez Canal, the world's most important maritime chokepoint, gives our clients an edge no other hub can offer.</p></div></div>
+          <div class="pillar" style="--pillar-c:#0d8a72;--pillar-c-glow:rgba(13,138,114,0.25)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar1.title">Veteran operators, fresh playbook</h4><p data-i18n="pillar1.desc">Run by people who've spent 40 years on Egypt's docks. Now applied to a brand built from scratch — modern tools, leaner ops, no legacy baggage.</p></div></div>
+          <div class="pillar" style="--pillar-c:#d4a73c;--pillar-c-glow:rgba(212,167,60,0.28)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar2.title">Every Egyptian port, day one</h4><p data-i18n="pillar2.desc">From Alexandria to Ain Sokhna, our team has worked them all. We start with relationships and know-how that most companies spend a decade trying to build.</p></div></div>
+          <div class="pillar" style="--pillar-c:#0066ff;--pillar-c-glow:rgba(0,102,255,0.28)"><div class="pillar-accent"></div><div><h4 data-i18n="pillar3.title">Egypt's strategic edge</h4><p data-i18n="pillar3.desc">We operate from the Suez Canal, the most important maritime chokepoint on earth. That's an advantage no other hub can sell you.</p></div></div>
         </div>
       </div>
       <div class="about-right fade-up fade-up-d1">
         <div class="timeline">
-          <div class="tl-item" style="--tl-c:#b8893d;--tl-c-glow:rgba(184,137,61,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">1914</div><div class="tl-event" data-i18n="tl1.event">Founded in Egypt</div><div class="tl-detail" data-i18n="tl1.detail">First maritime agency established in Alexandria, focused on ship husbandry and crew services.</div></div></div>
-          <div class="tl-item" style="--tl-c:#7e2f5e;--tl-c-glow:rgba(126,47,94,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">1952</div><div class="tl-event" data-i18n="tl2.event">Dubai partnership formed</div><div class="tl-detail" data-i18n="tl2.detail">Established freight forwarding partnership in Jebel Ali, opening routes to Southeast Asia and the Indian subcontinent.</div></div></div>
-          <div class="tl-item" style="--tl-c:#0d8a72;--tl-c-glow:rgba(13,138,114,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">1989</div><div class="tl-event" data-i18n="tl3.event">Horn of Africa expansion</div><div class="tl-detail" data-i18n="tl3.detail">Opened offices in Djibouti and Aden, establishing control over the full Red Sea and Gulf of Aden corridor.</div></div></div>
-          <div class="tl-item" style="--tl-c:#3949ab;--tl-c-glow:rgba(57,73,171,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">2010</div><div class="tl-event" data-i18n="tl4.event">Full logistics integration</div><div class="tl-detail" data-i18n="tl4.detail">Merged all regional operations into a single logistics platform: FCL, LCL, project cargo, and inland distribution unified.</div></div></div>
-          <div class="tl-item" style="--tl-c:#ff4d8d;--tl-c-glow:rgba(255,77,141,0.55)"><div class="tl-dot-wrap"><div class="tl-dot active"></div></div><div><div class="tl-year">2026</div><div class="tl-event" data-i18n="tl5.event">Egypt HQ. Launched to the world</div><div class="tl-detail" data-i18n="tl5.detail">SHB Shipping Co. officially launches with a new brand, new headquarters in Egypt, and a renewed commitment to global excellence.</div></div></div>
+          <div class="tl-item" style="--tl-c:#b8893d;--tl-c-glow:rgba(184,137,61,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">1986</div><div class="tl-event" data-i18n="tl1.event">First days on the docks</div><div class="tl-detail" data-i18n="tl1.detail">Our leadership begins work in Alexandria — ship husbandry, crew services, learning every dock from the ground up.</div></div></div>
+          <div class="tl-item" style="--tl-c:#7e2f5e;--tl-c-glow:rgba(126,47,94,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">1995</div><div class="tl-event" data-i18n="tl2.event">Mastering Port Said</div><div class="tl-detail" data-i18n="tl2.detail">The team takes on Port Said operations — the Suez Canal's northern entrance and one of the busiest transit points on earth.</div></div></div>
+          <div class="tl-item" style="--tl-c:#0d8a72;--tl-c-glow:rgba(13,138,114,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">2005</div><div class="tl-event" data-i18n="tl3.event">Red Sea years</div><div class="tl-detail" data-i18n="tl3.detail">A decade working Ain Sokhna and the Red Sea trade, locking in the Canal's southern entrance.</div></div></div>
+          <div class="tl-item" style="--tl-c:#3949ab;--tl-c-glow:rgba(57,73,171,0.5)"><div class="tl-dot-wrap"><div class="tl-dot"></div></div><div><div class="tl-year">2015</div><div class="tl-event" data-i18n="tl4.event">Damietta added</div><div class="tl-detail" data-i18n="tl4.detail">The team adds Damietta — first-hand experience now at every major Egyptian commercial port.</div></div></div>
+          <div class="tl-item" style="--tl-c:#ff4d8d;--tl-c-glow:rgba(255,77,141,0.55)"><div class="tl-dot-wrap"><div class="tl-dot active"></div></div><div><div class="tl-year">2026</div><div class="tl-event" data-i18n="tl5.event">SHB Shipping Co. launches</div><div class="tl-detail" data-i18n="tl5.detail">Forty years of practice under one new flag. Fresh brand, modern platform, the same team that's been running the docks for decades.</div></div></div>
         </div>
       </div>
     </div>
@@ -562,13 +599,13 @@
   <div class="container">
     <div class="section-header fade-up">
       <div class="eyebrow" data-i18n="routes.eyebrow">Our Network</div>
-      <h2 data-i18n="routes.title">Strategic ports.<br/>Global reach.</h2>
-      <p data-i18n="routes.sub">Four key hubs anchoring the world's most important maritime corridors.</p>
+      <h2 data-i18n="routes.title">Egyptian ports.<br/>Worldwide reach.</h2>
+      <p data-i18n="routes.sub">Four major Egyptian seaports, every coast covered, connecting national trade to destinations across the globe.</p>
     </div>
     <div class="map-wrap fade-up">
       <div class="map-hud-top">
         <span class="map-hud-tag">LIVE</span>
-        <span>Global Trade Network</span>
+        <span>Egypt · Worldwide Shipping</span>
         <span>31°12′N · 29°54′E</span>
       </div>
       <div class="map-corner tl"></div><div class="map-corner tr"></div>
@@ -695,36 +732,22 @@
           <circle r="3.5" fill="#ffb84d" filter="url(#softGlow)"><animateMotion dur="9.5s" repeatCount="indefinite"><mpath href="#rt10"/></animateMotion></circle>
         </g>
 
-        <!-- TIER 3 — Extended network ports (CYAN, smaller) -->
-        <g font-family="JetBrains Mono,monospace" font-size="10" fill="#7ec8ff" letter-spacing="0.14em" font-weight="500">
+        <!-- TIER 3 — Worldwide destination dots (CYAN, unlabelled) -->
+        <g>
           <circle cx="1307" cy="271" r="3.4" fill="#00d4ff"/>
-          <text x="1314" y="275">HONG KONG</text>
           <circle cx="1374" cy="220" r="3.2" fill="#00d4ff"/>
-          <text x="1381" y="216">BUSAN</text>
           <circle cx="1421" cy="217" r="3.2" fill="#00d4ff"/>
-          <text x="1428" y="213">TOKYO</text>
           <circle cx="1098" cy="261" r="3" fill="#00d4ff"/>
-          <text x="1106" y="258">KARACHI</text>
           <circle cx="977" cy="376" r="3" fill="#00d4ff"/>
-          <text x="985" y="380">MOMBASA</text>
           <circle cx="774" cy="217" r="2.9" fill="#00d4ff"/>
-          <text x="734" y="214" text-anchor="end">TANGIER</text>
           <circle cx="905" cy="208" r="2.9" fill="#00d4ff"/>
-          <text x="912" y="204">PIRAEUS</text>
           <circle cx="844" cy="146" r="3" fill="#00d4ff"/>
-          <text x="852" y="135">HAMBURG</text>
           <circle cx="806" cy="170" r="2.7" fill="#00d4ff"/>
-          <text x="745" y="170" text-anchor="end">FELIXSTOWE</text>
           <circle cx="376" cy="241" r="3" fill="#00d4ff"/>
-          <text x="384" y="244">HOUSTON</text>
           <circle cx="253" cy="163" r="2.9" fill="#00d4ff"/>
-          <text x="244" y="160" text-anchor="end">VANCOUVER</text>
           <circle cx="540" cy="498" r="2.9" fill="#00d4ff"/>
-          <text x="532" y="514" text-anchor="end">BUENOS AIRES</text>
           <circle cx="457" cy="408" r="2.7" fill="#00d4ff"/>
-          <text x="448" y="406" text-anchor="end">CALLAO</text>
           <circle cx="1560" cy="525" r="2.9" fill="#00d4ff"/>
-          <text x="1551" y="544" text-anchor="end">AUCKLAND</text>
         </g>
 
         <!-- TIER 2 — Active trade-route destinations (HOT MAGENTA, bold) -->
@@ -748,32 +771,22 @@
           <circle cx="471" cy="197" r="10" fill="none" stroke="#ff4d8d" stroke-width="1" opacity="0.55"><animate attributeName="r" from="6" to="16" dur="2.8s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.7" to="0" dur="2.8s" repeatCount="indefinite"/></circle>
           <circle cx="820" cy="152" r="10" fill="none" stroke="#ff4d8d" stroke-width="1" opacity="0.55"><animate attributeName="r" from="6" to="16" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.7" to="0" dur="2.4s" repeatCount="indefinite"/></circle>
 
-          <!-- Dots + labels -->
+          <!-- Dots only — anonymous worldwide destinations -->
           <circle cx="1261" cy="355" r="5" fill="#ff4d8d"/><circle cx="1261" cy="355" r="2" fill="#fff"/>
-          <text x="1270" y="372" fill="#ff7eaf">SINGAPORE</text>
           <circle cx="1340" cy="235" r="5" fill="#ff4d8d"/><circle cx="1340" cy="235" r="2" fill="#fff"/>
-          <text x="1349" y="232" fill="#ff7eaf">SHANGHAI</text>
           <circle cx="1124" cy="284" r="4.5" fill="#ff4d8d"/><circle cx="1124" cy="284" r="1.8" fill="#fff"/>
-          <text x="1133" y="282" fill="#ff7eaf">MUMBAI</text>
           <circle cx="820" cy="152" r="5" fill="#ff4d8d"/><circle cx="820" cy="152" r="2" fill="#fff"/>
-          <text x="829" y="148" fill="#ff7eaf">ROTTERDAM</text>
           <circle cx="471" cy="197" r="5" fill="#ff4d8d"/><circle cx="471" cy="197" r="2" fill="#fff"/>
-          <text x="480" y="194" fill="#ff7eaf">NEW YORK</text>
           <circle cx="815" cy="334" r="4.5" fill="#ff4d8d"/><circle cx="815" cy="334" r="1.8" fill="#fff"/>
-          <text x="775" y="350" text-anchor="end" fill="#ff7eaf">LAGOS</text>
           <circle cx="882" cy="496" r="5" fill="#ff4d8d"/><circle cx="882" cy="496" r="2" fill="#fff"/>
-          <text x="891" y="500" fill="#ff7eaf">CAPE TOWN</text>
           <circle cx="1472" cy="495" r="5" fill="#ff4d8d"/><circle cx="1472" cy="495" r="2" fill="#fff"/>
-          <text x="1481" y="492" fill="#ff7eaf">SYDNEY</text>
           <circle cx="594" cy="456" r="4.5" fill="#ff4d8d"/><circle cx="594" cy="456" r="1.8" fill="#fff"/>
-          <text x="603" y="460" fill="#ff7eaf">SANTOS</text>
           <circle cx="275" cy="225" r="4.5" fill="#ff4d8d"/><circle cx="275" cy="225" r="1.8" fill="#fff"/>
-          <text x="266" y="217" text-anchor="end" fill="#ff7eaf">LONG BEACH</text>
         </g>
 
-        <!-- TIER 1 — SHB HUBS (AMBER GOLD, biggest, brightest) -->
+        <!-- TIER 1 — SHB EGYPT HQ (AMBER GOLD, the only named hub) -->
         <g font-family="Space Grotesk,sans-serif">
-          <!-- Egypt HQ (Alexandria / Port Said) -->
+          <!-- Egypt HQ (Alexandria / Port Said / Damietta / Ain Sokhna) -->
           <circle cx="938" cy="235" r="42" fill="url(#hubGlow)" opacity="0.95"/>
           <circle cx="938" cy="235" r="22" fill="none" stroke="#f5b942" stroke-width="1.4" opacity="0.6">
             <animate attributeName="r" from="14" to="44" dur="2.4s" repeatCount="indefinite"/>
@@ -787,39 +800,7 @@
           <circle cx="938" cy="235" r="6" fill="#ffe4a8"/>
           <circle cx="938" cy="235" r="2.5" fill="#fff"/>
           <text x="938" y="200" font-size="15" fill="#ffd27a" text-anchor="middle" font-weight="700" letter-spacing="0.22em">EGYPT · HQ</text>
-          <text x="938" y="186" font-family="JetBrains Mono,monospace" font-size="10" fill="#f5b942" text-anchor="middle" letter-spacing="0.22em" font-weight="600">PORT SAID · ALEXANDRIA</text>
-
-          <!-- Dubai (Jebel Ali) -->
-          <circle cx="1044" cy="261" r="28" fill="url(#hubGlow)" opacity="0.8"/>
-          <circle cx="1044" cy="261" r="18" fill="none" stroke="#f5b942" stroke-width="1.2" opacity="0.55">
-            <animate attributeName="r" from="10" to="30" dur="2.6s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" from="0.7" to="0" dur="2.6s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="1044" cy="261" r="8" fill="#f5b942" filter="url(#softGlow)"/>
-          <circle cx="1044" cy="261" r="3.5" fill="#fff"/>
-          <text x="1044" y="240" font-size="13" fill="#ffd27a" text-anchor="middle" font-weight="700" letter-spacing="0.2em">DUBAI</text>
-          <text x="1044" y="282" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#f5b942" text-anchor="middle" letter-spacing="0.22em" font-weight="600">JEBEL ALI</text>
-
-          <!-- Djibouti -->
-          <circle cx="992" cy="314" r="24" fill="url(#hubGlow)" opacity="0.7"/>
-          <circle cx="992" cy="314" r="14" fill="none" stroke="#f5b942" stroke-width="1" opacity="0.45">
-            <animate attributeName="r" from="8" to="24" dur="2.8s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" from="0.6" to="0" dur="2.8s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="992" cy="314" r="7" fill="#f5b942" filter="url(#softGlow)"/>
-          <circle cx="992" cy="314" r="3" fill="#fff"/>
-          <text x="980" y="338" font-size="12" fill="#ffd27a" text-anchor="end" font-weight="700" letter-spacing="0.2em">DJIBOUTI</text>
-
-          <!-- Aden -->
-          <circle cx="1018" cy="307" r="22" fill="url(#hubGlow)" opacity="0.65"/>
-          <circle cx="1018" cy="307" r="12" fill="none" stroke="#f5b942" stroke-width="1" opacity="0.45">
-            <animate attributeName="r" from="7" to="20" dur="2.5s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" from="0.6" to="0" dur="2.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="1018" cy="307" r="6.5" fill="#f5b942" filter="url(#softGlow)"/>
-          <circle cx="1018" cy="307" r="2.8" fill="#fff"/>
-          <text x="1042" y="305" font-size="12" fill="#ffd27a" font-weight="700" letter-spacing="0.2em">ADEN</text>
-          <text x="1042" y="318" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#f5b942" letter-spacing="0.2em" font-weight="600">YEMEN</text>
+          <text x="938" y="186" font-family="JetBrains Mono,monospace" font-size="10" fill="#f5b942" text-anchor="middle" letter-spacing="0.22em" font-weight="600">ALEXANDRIA · PORT SAID · DAMIETTA · SOKHNA</text>
         </g>
 
         <!-- Scan line -->
@@ -836,16 +817,16 @@
       </div>
       <div class="map-scroll-hint" aria-hidden="true">↔ swipe</div>
       <div class="map-hud-bot">
-        <span>04 HUBS · 24 PORTS · 10 ROUTES</span>
-        <span>EGYPT → THE WORLD</span>
+        <span>04 EGYPTIAN PORTS · 10 GLOBAL ROUTES</span>
+        <span>EGYPT → WORLDWIDE</span>
         <span>24/7 ACTIVE</span>
       </div>
     </div>
     <div class="ports-grid">
-      <div class="port-card fade-up" style="--port-c:#d4a73c;--port-c-glow:rgba(212,167,60,0.22)"><div class="port-flag">🇪🇬</div><div class="port-country" data-i18n="port1.country">Egypt, Headquarters</div><div class="port-name" data-i18n="port1.name">Port Said &amp; Alexandria</div><p class="port-desc" data-i18n="port1.desc">Gateway to the Suez Canal and the Mediterranean. Egypt's two primary container terminals, our home base and global launch point.</p></div>
-      <div class="port-card fade-up fade-up-d1" style="--port-c:#0d8a4a;--port-c-glow:rgba(13,138,74,0.22)"><div class="port-flag">🇦🇪</div><div class="port-country" data-i18n="port2.country">United Arab Emirates</div><div class="port-name" data-i18n="port2.name">Jebel Ali, Dubai</div><p class="port-desc" data-i18n="port2.desc">The largest port in the Middle East. Our Dubai partnership enables direct access to South Asia, East Africa, and the Gulf states.</p></div>
-      <div class="port-card fade-up fade-up-d2" style="--port-c:#5cb1e0;--port-c-glow:rgba(92,177,224,0.22)"><div class="port-flag">🇩🇯</div><div class="port-country" data-i18n="port3.country">Djibouti</div><div class="port-name" data-i18n="port3.name">Port of Djibouti</div><p class="port-desc" data-i18n="port3.desc">The Horn of Africa's premier transshipment hub. Critical relay point for cargo between the Red Sea and Indian Ocean.</p></div>
-      <div class="port-card fade-up fade-up-d3" style="--port-c:#ce1126;--port-c-glow:rgba(206,17,38,0.22)"><div class="port-flag">🇾🇪</div><div class="port-country" data-i18n="port4.country">Yemen</div><div class="port-name" data-i18n="port4.name">Port of Aden</div><p class="port-desc" data-i18n="port4.desc">Historically one of the world's busiest bunkering and transshipment ports. Our Yemen partnership maintains deep local expertise.</p></div>
+      <div class="port-card fade-up" style="--port-c:#d4a73c;--port-c-glow:rgba(212,167,60,0.22)"><div class="port-flag">🇪🇬</div><div class="port-country" data-i18n="port1.country">Egypt · Headquarters</div><div class="port-name" data-i18n="port1.name">Alexandria</div><p class="port-desc" data-i18n="port1.desc">Egypt's largest commercial seaport on the Mediterranean. Our home base and global gateway — our team has worked these docks since 1986.</p></div>
+      <div class="port-card fade-up fade-up-d1" style="--port-c:#0d8a4a;--port-c-glow:rgba(13,138,74,0.22)"><div class="port-flag">🇪🇬</div><div class="port-country" data-i18n="port2.country">Egypt · Suez Canal North</div><div class="port-name" data-i18n="port2.name">Port Said</div><p class="port-desc" data-i18n="port2.desc">The Suez Canal's northern entrance and one of the world's most strategic transit hubs. Container, transshipment, and ship-husbandry operations.</p></div>
+      <div class="port-card fade-up fade-up-d2" style="--port-c:#5cb1e0;--port-c-glow:rgba(92,177,224,0.22)"><div class="port-flag">🇪🇬</div><div class="port-country" data-i18n="port3.country">Egypt · Mediterranean</div><div class="port-name" data-i18n="port3.name">Damietta</div><p class="port-desc" data-i18n="port3.desc">Egypt's modern Mediterranean container hub. Deep-water berths, fast turnaround, and direct connections to international shipping lanes.</p></div>
+      <div class="port-card fade-up fade-up-d3" style="--port-c:#ce1126;--port-c-glow:rgba(206,17,38,0.22)"><div class="port-flag">🇪🇬</div><div class="port-country" data-i18n="port4.country">Egypt · Red Sea</div><div class="port-name" data-i18n="port4.name">Ain Sokhna</div><p class="port-desc" data-i18n="port4.desc">The Suez Canal's southern entrance on the Red Sea. Egypt's gateway to worldwide trade lanes east and south, with containers, bulk, and bunkering on hand.</p></div>
     </div>
   </div>
 </section>
@@ -858,9 +839,9 @@
         <div class="eyebrow" data-i18n="contact.eyebrow">Get in Touch</div>
         <h2 data-i18n="contact.title">Ready to move<br/>your cargo?</h2>
         <p data-i18n="contact.desc">Whether you need a full container, a partial load, or a complex multi-port project, our team is ready to build a solution around your requirements. Reach out and we'll respond within one business day.</p>
-        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.hq.label">HQ</div><div class="contact-detail-val" data-i18n="contact.hq.val">Egypt. Alexandria &amp; Port Said Operations</div></div>
-        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.net.label">Network</div><div class="contact-detail-val" data-i18n="contact.net.val">Dubai · Djibouti · Aden, Yemen</div></div>
-        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.ops.label">Operations</div><div class="contact-detail-val" data-i18n="contact.ops.val">24/7, 365 days a year</div></div>
+        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.hq.label">HQ</div><div class="contact-detail-val" data-i18n="contact.hq.val">Alexandria, Egypt</div></div>
+        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.net.label">Network</div><div class="contact-detail-val" data-i18n="contact.net.val">Alexandria · Port Said · Damietta · Ain Sokhna</div></div>
+        <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.ops.label">Operations</div><div class="contact-detail-val" data-i18n="contact.ops.val">24/7, 365 days a year · Worldwide shipping</div></div>
         <div class="contact-detail"><div class="contact-detail-label" data-i18n="contact.email.label">Email</div><div class="contact-detail-val">operations@sbhshipping.com</div></div>
         <div class="contact-quote"><p data-i18n="contact.quote">We have been navigating these waters since before most of our competitors were founded.</p></div>
       </div>
@@ -887,7 +868,7 @@
               <option data-i18n="svc10.title">Bunkering &amp; Coordination</option>
             </select>
           </div>
-          <div class="form-group"><label data-i18n="form.route">Origin → Destination</label><input type="text" data-placeholder-i18n="form.route.ph" placeholder="e.g. Alexandria → Jebel Ali"/></div>
+          <div class="form-group"><label data-i18n="form.route">Origin → Destination</label><input type="text" data-placeholder-i18n="form.route.ph" placeholder="e.g. Alexandria → worldwide"/></div>
           <div class="form-group"><label data-i18n="form.msg">Additional details</label><textarea data-placeholder-i18n="form.msg.ph" placeholder="Cargo type, volume, timeline..."></textarea></div>
           <button type="submit" class="form-submit" id="submit-btn" data-i18n="form.submit">Send Request ◈</button>
           <div id="form-success" class="form-success" style="display:none;" data-i18n="form.success">Your request has been received. Our team will respond within one business day.</div>
@@ -903,26 +884,14 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="#hero" style="display:flex;align-items:center;gap:14px;text-decoration:none;margin-bottom:4px;">
-          <svg width="38" height="38" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="lg3" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0066ff"/><stop offset="100%" stop-color="#00d4ff"/></linearGradient></defs>
-            <circle cx="23" cy="23" r="21" stroke="url(#lg3)" stroke-width="1" fill="none" opacity="0.4"/>
-            <path d="M23 14 L13 5 L33 5 Z" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="0.4" opacity="0.6"/>
-            <circle cx="23" cy="13" r="2" fill="#00d4ff"/>
-            <rect x="20.5" y="14.5" width="5" height="2" fill="#0066ff"/>
-            <path d="M19.5 16 L26.5 16 L25.5 28 L20.5 28 Z" fill="rgba(0,102,255,0.18)" stroke="#0066ff" stroke-width="1"/>
-            <path d="M6 28 L40 28 L37 34 L9 34 Z" fill="rgba(0,102,255,0.15)" stroke="#0066ff" stroke-width="1.2"/>
-            <rect x="11" y="25" width="6" height="3" fill="#00d4ff" opacity="0.85"/>
-            <rect x="29" y="25" width="6" height="3" fill="#00d4ff" opacity="0.85"/>
-            <path d="M4 38 Q10 36 16 38 Q22 40 28 38 Q34 36 42 38" stroke="#0066ff" stroke-width="1" fill="none" stroke-linecap="round"/>
-            <path d="M6 41 Q12 39.5 18 41 Q24 42.5 30 41 Q36 39.5 40 41" stroke="#00d4ff" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.7"/>
-          </svg>
+          <img src="brand/sbh-logo-mark.svg" alt="SHB Shipping Co." width="38" height="38" style="display:block;"/>
           <div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--bone);letter-spacing:5px;">SHB</div>
+            <div class="footer-brand-name" data-i18n="nav.brand">SHB</div>
             <div style="font-size:8px;color:var(--cyan);letter-spacing:4px;margin-top:3px;font-weight:400;" data-i18n="nav.sub">SHIPPING CO.</div>
           </div>
         </a>
         <div class="footer-acronym" data-i18n="acronym.tagline">Bridging the world's harbors by sea</div>
-        <p data-i18n="footer.tagline">Over 112 years of maritime expertise. Operating from Egypt to the world. Through the Red Sea, Mediterranean, and beyond.</p>
+        <p data-i18n="footer.tagline">New company. Veteran crew. Forty years on Egypt's coast, packaged into one modern brand. From every Egyptian port to the world.</p>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.services">Services</h4>
@@ -934,10 +903,10 @@
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.network">Network</h4>
-        <a href="#routes" data-i18n="port1.name">Port Said &amp; Alexandria</a>
-        <a href="#routes" data-i18n="port2.name">Jebel Ali, Dubai</a>
-        <a href="#routes" data-i18n="port3.name">Port of Djibouti</a>
-        <a href="#routes" data-i18n="port4.name">Port of Aden</a>
+        <a href="#routes" data-i18n="port1.name">Alexandria</a>
+        <a href="#routes" data-i18n="port2.name">Port Said</a>
+        <a href="#routes" data-i18n="port3.name">Damietta</a>
+        <a href="#routes" data-i18n="port4.name">Ain Sokhna</a>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer.company">Company</h4>
@@ -947,7 +916,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p data-i18n="footer.copy">© 2026 SHB Shipping Co. All rights reserved. Egypt · Dubai · Djibouti · Yemen</p>
+      <p data-i18n="footer.copy">© 2026 SHB Shipping Co. All rights reserved. Alexandria · Port Said · Damietta · Ain Sokhna · Egypt</p>
       <div style="display:flex;gap:20px;"><a href="#" data-i18n="footer.privacy">Privacy Policy</a><a href="#" data-i18n="footer.terms">Terms of Service</a></div>
     </div>
   </div>
@@ -992,112 +961,112 @@ ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweaksApp/>)
 // ── TRANSLATIONS ──────────────────────────────
 const T = {
   en: {
-    "nav.sub":"SHIPPING CO.","nav.services":"Services","nav.legacy":"Legacy","nav.routes":"Routes","nav.quote":"Get a Quote",
-    "hero.mark":"EST. 1914 · ALEXANDRIA",
-    "hero.eyebrow":"Egypt · Dubai · Djibouti · Yemen · The World",
-    "hero.title":"A century of <em>precision.</em> <span>One ocean</span> at a time.",
-    "hero.desc":"From the Suez to the world. SHB Shipping moves cargo across the Red Sea, Gulf of Aden, and beyond. Backed by 112 years on the water and a network that doesn't quit.",
+    "nav.brand":"SHB","nav.sub":"SHIPPING CO.","nav.services":"Services","nav.legacy":"Legacy","nav.routes":"Routes","nav.quote":"Get a Quote",
+    "hero.mark":"EST. 2026 · 40 YRS ON THE WATER",
+    "hero.eyebrow":"New company · Veteran crew · Egypt to the world",
+    "hero.title":"New flag. <em>Forty years</em> <span>on the water.</span>",
+    "hero.desc":"Egyptian ports to the world. Run by people who've done this for four decades.",
     "hero.cta1":"Get a Quote","hero.cta2":"See the Routes",
-    "stats.years":"Years at sea","stats.hubs":"Regional hubs","stats.dest":"Destinations",
-    "panel.sub":"SHIPPING CO.","panel.ops":"Operations","panel.routes":"Live routes","panel.dest":"Destinations","panel.est":"Est.","panel.since":"Since 1914",
+    "stats.years":"Operator years","stats.hubs":"Egyptian ports","stats.dest":"Worldwide destinations",
+    "panel.sub":"SHIPPING CO.","panel.ops":"Operations","panel.routes":"Live routes","panel.dest":"Destinations","panel.est":"Est.","panel.since":"Day One · 2026",
     "svc.eyebrow":"What We Do","svc.title":"Maritime services,<br/>end to end","svc.sub":"Vessel rep to cargo logistics. Every link in your chain, locked tight.",
-    "svc1.title":"Liner Agency","svc1.desc":"Full agency for liner carriers at Egyptian and regional ports. Schedules, port calls, paperwork, and direct liaison with port authorities.",
+    "svc1.title":"Liner Agency","svc1.desc":"Full agency for liner carriers calling at Alexandria, Port Said, Damietta and Ain Sokhna. Schedules, port calls, paperwork, and direct liaison with Egyptian port authorities.",
     "svc2.title":"Dry &amp; Liquid Bulk","svc2.desc":"Specialised handling for grain, coal, minerals, petroleum products and chemicals. Moved with the right hands, every time.",
     "svc3.title":"Container Agency","svc3.desc":"Bookings, documentation, equipment, and on-the-ground coordination at origin and destination. One contact. Zero gaps.",
     "svc4.title":"Owner Protection","svc4.desc":"Independent P&amp;I and owner-protection services. Your interests, defended at every port of call.",
-    "svc5.title":"Customs Clearance","svc5.desc":"In-house customs brokerage across Egypt, UAE, Djibouti and Yemen. Handled by certified agents who know the rules cold.",
-    "svc6.title":"Sea Freight Forwarding","svc6.desc":"FCL and LCL out of Egypt's major ports to five continents. Full docs, full visibility, full stop.",
-    "svc7.title":"Ship Charter &amp; Agency","svc7.desc":"Charter party negotiation, voyage management, and maritime agency for owners and charterers across the region.",
+    "svc5.title":"Customs Clearance","svc5.desc":"In-house customs brokerage at every major Egyptian seaport. Handled by certified Egyptian agents who know the rules cold.",
+    "svc6.title":"Sea Freight Forwarding","svc6.desc":"FCL and LCL out of Egypt's major ports to destinations on every continent. Full docs, full visibility, full stop.",
+    "svc7.title":"Ship Charter &amp; Agency","svc7.desc":"Charter party negotiation, voyage management, and maritime agency for owners and charterers calling Egyptian waters.",
     "svc8.title":"Port Agency","svc8.desc":"Husbandry, clearance, cargo supervision, disbursement accounts, local authority liaison. The full call, handled.",
     "svc9.title":"Crew Changes","svc9.desc":"Seamless embarkation and disembarkation. Visas, transport, accommodation, medical. All sorted.",
-    "svc10.title":"Bunkering","svc10.desc":"Fuel procurement, bunkering coordination, and logistical backup for vessels calling the Red Sea and Gulf of Aden.",
-    "trust1":"Egyptian Maritime Data System Registered","trust2":"ISO 9001:2015 Certified","trust3":"FIATA Member Freight Forwarder","trust4":"Founded 1914 · Egypt HQ 2026","trust5":"24/7 Operations Desk",
-    "about.eyebrow":"Our Legacy","about.title":"Built on<br/><em>eleven decades</em><br/>of the sea",
-    "about.p1":"SHB Shipping started as a family business on Egypt's coast in 1914, and we've been moving cargo through the world's busiest waters ever since. A regional agency that grew into a multi-corridor logistics group, with real partnerships across the Arabian Peninsula and the Horn of Africa.",
-    "about.p2":"In 2026, we open our new Egypt headquarters. One brand. One platform. One promise: move what matters, without fail.",
-    "pillar1.title":"Regional expertise, no shortcuts","pillar1.desc":"Red Sea, Suez, Gulf of Aden. We know these corridors because we've worked them for 112 years. Not learned from a manual.",
-    "pillar2.title":"Real partnerships","pillar2.desc":"Our Dubai, Djibouti and Yemen teams are long-term allies, not transactional middlemen. We move together.",
+    "svc10.title":"Bunkering","svc10.desc":"Fuel procurement, bunkering coordination, and logistical backup for vessels calling Egypt's Mediterranean and Red Sea ports.",
+    "trust1":"Run by 40-Year Veterans","trust2":"Coverage at Every Major Egyptian Port","trust3":"In-House Customs Brokerage","trust4":"Founded 2026 · Day One Operations","trust5":"24/7 Operations Desk · Bilingual",
+    "about.eyebrow":"Track Record","about.title":"New company.<br/><em>Forty years</em><br/>on the water.",
+    "about.p1":"SHB Shipping Co. is new. The people running it aren't. Four decades on Egypt's coast — every major port, every kind of cargo, every type of vessel. The team has spent a working lifetime on these docks.",
+    "about.p2":"We launched SHB in 2026 to put that experience under one modern brand. Lean operation, sharp tools, and leadership that knows where every bollard sits at every Egyptian terminal.",
+    "pillar1.title":"Veteran operators, fresh playbook","pillar1.desc":"Run by people who've spent 40 years on Egypt's docks. Now applied to a brand built from scratch — modern tools, leaner ops, no legacy baggage.",
+    "pillar2.title":"Every Egyptian port, day one","pillar2.desc":"From Alexandria to Ain Sokhna, our team has worked them all. We start with relationships and know-how that most companies spend a decade trying to build.",
     "pillar3.title":"Egypt's strategic edge","pillar3.desc":"We operate from the Suez Canal, the most important maritime chokepoint on earth. That's an advantage no other hub can sell you.",
-    "tl1.event":"Founded in Egypt","tl1.detail":"First agency office opens in Alexandria. Ship husbandry and crew services from day one.",
-    "tl2.event":"Dubai partnership","tl2.detail":"Freight forwarding link-up in Jebel Ali opens routes to Southeast Asia and the Indian subcontinent.",
-    "tl3.event":"Horn of Africa expansion","tl3.detail":"Offices open in Djibouti and Aden, locking in the full Red Sea and Gulf of Aden corridor.",
-    "tl4.event":"One platform","tl4.detail":"Regional operations merge into a single logistics platform: FCL, LCL, project cargo, inland distribution.",
-    "tl5.event":"Egypt HQ. Going global","tl5.detail":"SHB Shipping launches a new brand, a new Egypt headquarters, and a renewed commitment to global excellence.",
-    "routes.eyebrow":"Our Network","routes.title":"Strategic ports.<br/>Global reach.","routes.sub":"Four hubs anchoring the world's most important maritime corridors.",
-    "port1.country":"Egypt, Headquarters","port1.name":"Port Said &amp; Alexandria","port1.desc":"Gateway to the Suez and the Mediterranean. Egypt's two flagship container terminals, and our home base.",
-    "port2.country":"United Arab Emirates","port2.name":"Jebel Ali, Dubai","port2.desc":"The Middle East's largest port. Our Dubai team plugs you straight into South Asia, East Africa and the Gulf.",
-    "port3.country":"Djibouti","port3.name":"Port of Djibouti","port3.desc":"The Horn of Africa's top transshipment hub. The relay point between the Red Sea and the Indian Ocean.",
-    "port4.country":"Yemen","port4.name":"Port of Aden","port4.desc":"Historically one of the busiest bunkering and transshipment ports on earth. Our Yemen partnership keeps that heritage alive.",
-    "contact.eyebrow":"Get in Touch","contact.title":"Ready to move<br/><em>your cargo?</em>","contact.desc":"Full container, partial load, or a multi-port project. Tell us what you need. We'll build the solution around it.",
-    "contact.hq.label":"HQ","contact.hq.val":"Egypt. Alexandria &amp; Port Said",
-    "contact.net.label":"Network","contact.net.val":"Dubai · Djibouti · Aden, Yemen",
-    "contact.ops.label":"Operations","contact.ops.val":"24/7, 365 days a year",
-    "contact.email.label":"Email","contact.quote":"We've been working these waters since before most of our competitors existed.",
+    "tl1.event":"First days on the docks","tl1.detail":"Our leadership begins work in Alexandria — ship husbandry, crew services, learning every dock from the ground up.",
+    "tl2.event":"Mastering Port Said","tl2.detail":"The team takes on Port Said operations — the Suez Canal's northern entrance and one of the busiest transit points on earth.",
+    "tl3.event":"Red Sea years","tl3.detail":"A decade working Ain Sokhna and the Red Sea trade, locking in the Canal's southern entrance.",
+    "tl4.event":"Damietta added","tl4.detail":"The team adds Damietta — first-hand experience now at every major Egyptian commercial port.",
+    "tl5.event":"SHB Shipping Co. launches","tl5.detail":"Forty years of practice under one new flag. Fresh brand, modern platform, the same team that's been running the docks for decades.",
+    "routes.eyebrow":"Our Network","routes.title":"Egyptian ports.<br/>Worldwide reach.","routes.sub":"Four major Egyptian seaports, every coast covered, connecting national trade to destinations across the globe.",
+    "port1.country":"Egypt · Headquarters","port1.name":"Alexandria","port1.desc":"Egypt's largest commercial seaport on the Mediterranean. Our home base and global gateway — our team has worked these docks since 1986.",
+    "port2.country":"Egypt · Suez Canal North","port2.name":"Port Said","port2.desc":"The Suez Canal's northern entrance and one of the world's most strategic transit hubs. Container, transshipment and ship-husbandry operations.",
+    "port3.country":"Egypt · Mediterranean","port3.name":"Damietta","port3.desc":"Egypt's modern Mediterranean container hub. Deep-water berths, fast turnaround, and direct connections to international shipping lanes.",
+    "port4.country":"Egypt · Red Sea","port4.name":"Ain Sokhna","port4.desc":"The Suez Canal's southern entrance on the Red Sea. Egypt's gateway to worldwide trade lanes east and south, with containers, bulk and bunkering on hand.",
+    "contact.eyebrow":"Get in Touch","contact.title":"Ready to move<br/><em>your cargo?</em>","contact.desc":"Full container, partial load, or a multi-port project across Egypt. Tell us what you need. We'll build the solution around it.",
+    "contact.hq.label":"HQ","contact.hq.val":"Alexandria, Egypt",
+    "contact.net.label":"Network","contact.net.val":"Alexandria · Port Said · Damietta · Ain Sokhna",
+    "contact.ops.label":"Operations","contact.ops.val":"24/7, 365 days a year · Worldwide shipping",
+    "contact.email.label":"Email","contact.quote":"Our company is brand new. Our operators have been doing this for forty years.",
     "form.fname":"First name","form.fname.ph":"Ahmed","form.lname":"Last name","form.lname.ph":"Hassan",
     "form.company":"Company","form.company.ph":"Your company name","form.email":"Email address","form.email.ph":"you@company.com",
-    "form.service":"Service needed","form.service.ph":"Select a service...","form.route":"Origin → Destination","form.route.ph":"e.g. Alexandria → Jebel Ali",
+    "form.service":"Service needed","form.service.ph":"Select a service...","form.route":"Origin → Destination","form.route.ph":"e.g. Alexandria → worldwide",
     "form.msg":"Additional details","form.msg.ph":"Cargo type, volume, timeline...","form.submit":"Send Request ◈","form.success":"Got it. Our team will be in touch within one business day.",
     "acronym.words":"Sea · Harbor · Bridge",
-    "acronym.tagline":"Bridging the world's harbors by sea",
-    "footer.tagline":"112+ years on the water. From Egypt to the world. Through the Red Sea, the Mediterranean, and everywhere in between.",
+    "acronym.tagline":"Bridging Egypt's harbors to the world by sea",
+    "footer.tagline":"New company. Veteran crew. Forty years on Egypt's coast, packaged into one modern brand. From every Egyptian port to the world.",
     "footer.services":"Services","footer.network":"Network","footer.company":"Company",
-    "footer.copy":"© 2026 SHB Shipping Co. All rights reserved. Egypt · Dubai · Djibouti · Yemen",
+    "footer.copy":"© 2026 SHB Shipping Co. All rights reserved. Alexandria · Port Said · Damietta · Ain Sokhna · Egypt",
     "footer.privacy":"Privacy Policy","footer.terms":"Terms of Service",
-    "ticker":["Ocean Freight","Port Said","Alexandria","Jebel Ali, Dubai","Port of Djibouti","Aden, Yemen","Customs Clearance","Bulk Cargo","Container Logistics","Red Sea Corridor","Mediterranean Routes","112+ Years on the Water","Liner Agency","Crew Changes","Bunkering"]
+    "ticker":["Ocean Freight","Alexandria","Port Said","Damietta","Ain Sokhna","Suez Canal","Customs Clearance","Bulk Cargo","Container Logistics","Red Sea Corridor","Mediterranean Routes","40+ Years on the Water","Liner Agency","Crew Changes","Bunkering"]
   },
   ar: {
-    "nav.sub":"للنقل والشحن البحري","nav.services":"خدماتنا","nav.legacy":"قصّتنا","nav.routes":"الخطوط","nav.quote":"اطلب عرض سعر",
-    "hero.mark":"تأسّست ١٩١٤ · الإسكندرية",
-    "hero.eyebrow":"مصر · دبي · جيبوتي · اليمن · العالم",
-    "hero.title":"منذ ١٩١٤، <em>والبحر</em> <span>طريقُنا.</span>",
-    "hero.desc":"من قناة السويس إلى العالم. SHB للنقل والشحن البحري تنقل بضاعتك عبر البحر الأحمر وخليج عدن وأبعد. بخبرة ١١٢ عامًا في عرض البحر، وشبكة لا تتوقف.",
+    "nav.brand":"سي هاربور بريدج","nav.sub":"للشحن البحري","nav.services":"خدماتنا","nav.legacy":"قصّتنا","nav.routes":"الخطوط","nav.quote":"اطلب عرض سعر",
+    "hero.mark":"تأسّست ٢٠٢٦ · ٤٠ سنة على المياه",
+    "hero.eyebrow":"شركة جديدة · طاقم خبير · من مصر إلى العالم",
+    "hero.title":"علَمٌ جديد. <em>أربعون عامًا</em> <span>على المياه.</span>",
+    "hero.desc":"من موانئ مصر إلى العالم. يديرها من يعملون في المهنة منذ أربعة عقود.",
     "hero.cta1":"اطلب عرض سعر","hero.cta2":"اكتشف خطوطنا",
-    "stats.years":"عامًا في عرض البحر","stats.hubs":"مراكز إقليمية","stats.dest":"وجهة",
-    "panel.sub":"للنقل والشحن البحري","panel.ops":"العمليات","panel.routes":"خطوط نشطة","panel.dest":"وجهة","panel.est":"تأسّست","panel.since":"منذ ١٩١٤",
+    "stats.years":"عامًا من خبرة الفريق","stats.hubs":"موانئ مصرية","stats.dest":"وجهات حول العالم",
+    "panel.sub":"للشحن البحري","panel.ops":"العمليات","panel.routes":"خطوط نشطة","panel.dest":"وجهة","panel.est":"تأسّست","panel.since":"اليوم الأول · ٢٠٢٦",
     "svc.eyebrow":"خدماتنا","svc.title":"خدمات بحرية<br/>من البداية للنهاية","svc.sub":"من تمثيل السفن إلى لوجستيات الشحن. كل حلقة في سلسلتك، مُحكَمة.",
-    "svc1.title":"وكالة خطوط ملاحية","svc1.desc":"تمثيل كامل لشركات الخطوط الملاحية في الموانئ المصرية والإقليمية. جداول، وصول السفن، توثيق، وتنسيق مباشر مع سلطات الموانئ.",
+    "svc1.title":"وكالة خطوط ملاحية","svc1.desc":"تمثيل كامل لشركات الخطوط الملاحية في الإسكندرية وبورسعيد ودمياط والعين السخنة. جداول، وصول السفن، توثيق، وتنسيق مباشر مع سلطات الموانئ المصرية.",
     "svc2.title":"شحن صبّ جاف وسوائل","svc2.desc":"تعامل متخصّص مع الحبوب والفحم والمعادن والمنتجات النفطية والكيماوية، بأيدٍ خبيرة في كل شحنة.",
     "svc3.title":"وكالة حاويات","svc3.desc":"حجوزات، وثائق، إدارة معدّات، وتنسيق ميداني في موانئ الإرسال والوصول. جهة اتصال واحدة، بلا فجوات.",
     "svc4.title":"حماية المُلّاك","svc4.desc":"خدمات حماية وتعويض مستقلّة لمُلّاك السفن. مصلحتك محميّة في كل ميناء ترسو فيه.",
-    "svc5.title":"التخليص الجمركي","svc5.desc":"تخليص جمركي داخلي في مصر والإمارات وجيبوتي واليمن، على يد وكلاء معتمدين يعرفون اللوائح بدقّة.",
-    "svc6.title":"الشحن البحري","svc6.desc":"حلول حاويات كاملة وجزئية من موانئ مصر إلى خمس قارات. توثيق كامل ورؤية كاملة من البداية إلى النهاية.",
-    "svc7.title":"تأجير ووكالة سفن","svc7.desc":"التفاوض على عقود الإيجار، إدارة الرحلات، وخدمات الوكالة البحرية لمُلّاك السفن والمستأجرين في المنطقة.",
+    "svc5.title":"التخليص الجمركي","svc5.desc":"تخليص جمركي داخلي في كل ميناء بحري مصري كبير، على يد وكلاء مصريين معتمدين يعرفون اللوائح بدقّة.",
+    "svc6.title":"الشحن البحري","svc6.desc":"حلول حاويات كاملة وجزئية من موانئ مصر إلى وجهات في كل القارات. توثيق كامل ورؤية كاملة من البداية إلى النهاية.",
+    "svc7.title":"تأجير ووكالة سفن","svc7.desc":"التفاوض على عقود الإيجار، إدارة الرحلات، وخدمات الوكالة البحرية لمُلّاك السفن والمستأجرين الذين يعبرون المياه المصرية.",
     "svc8.title":"وكالة الموانئ","svc8.desc":"خدمة سفن، تخليص ميناء، إشراف على البضائع، حسابات صرف، وتنسيق مع السلطات المحلية. كل تفاصيل الزيارة، تحت إدارتنا.",
     "svc9.title":"تغيير الطواقم","svc9.desc":"تنزيل وصعود الطواقم بسلاسة. تأشيرات، نقل، إقامة، ورعاية طبية. كل ما يلزم، جاهز.",
-    "svc10.title":"التزويد بالوقود","svc10.desc":"تأمين الوقود وتنسيق التزويد ودعم لوجستي للسفن التي ترسو في البحر الأحمر وخليج عدن.",
-    "trust1":"مسجّلون في نظام البيانات البحرية المصري","trust2":"اعتماد ISO 9001:2015","trust3":"عضو في اتحاد الشحن FIATA","trust4":"تأسست ١٩١٤ · مقر مصر ٢٠٢٦","trust5":"غرفة عمليات ٢٤/٧",
-    "about.eyebrow":"قصّتنا","about.title":"بُنينا على<br/><em>إحدى عشر عقدًا</em><br/>في عرض البحر",
-    "about.p1":"بدأت SHB للنقل والشحن البحري كعمل عائلي على ساحل مصر سنة ١٩١٤. ومنذ ذلك الحين ونحن ننقل البضائع عبر أكثر المياه ازدحامًا في العالم. وكالة إقليمية كبرت لتصبح مجموعة لوجستية متعددة الممرات، بشراكات حقيقية في شبه الجزيرة العربية وقرن أفريقيا.",
-    "about.p2":"في ٢٠٢٦، نفتح مقرنا الجديد في مصر. علامة واحدة. منصة واحدة. وعد واحد: ننقل ما يهمّك، دون أي تقصير.",
-    "pillar1.title":"خبرة إقليمية بلا اختصارات","pillar1.desc":"البحر الأحمر، السويس، خليج عدن. نعرف هذه الممرات لأننا نعمل فيها منذ ١١٢ سنة. ليست معرفة من كتاب.",
-    "pillar2.title":"شراكات حقيقية","pillar2.desc":"فرقنا في دبي وجيبوتي واليمن حلفاء على المدى الطويل، ليسوا وسطاء معاملات. نتحرك معًا.",
+    "svc10.title":"التزويد بالوقود","svc10.desc":"تأمين الوقود وتنسيق التزويد ودعم لوجستي للسفن التي ترسو في موانئ مصر على المتوسط والبحر الأحمر.",
+    "trust1":"يديرها قدامى بخبرة ٤٠ عامًا","trust2":"حضور في كل ميناء مصري كبير","trust3":"تخليص جمركي داخلي","trust4":"تأسست ٢٠٢٦ · من اليوم الأول","trust5":"غرفة عمليات ٢٤/٧ · بالعربية والإنجليزية",
+    "about.eyebrow":"سجلّ الخبرة","about.title":"شركة جديدة.<br/><em>أربعون عامًا</em><br/>على المياه.",
+    "about.p1":"سي هاربور بريدج للشحن البحري شركة جديدة. أما من يديرها فلا. أربعة عقود على ساحل مصر — كل ميناء كبير، كل نوع بضاعة، كل نوع سفينة. الفريق قضى عمرًا مهنيًا كاملًا على هذه الأرصفة.",
+    "about.p2":"أطلقنا سي هاربور بريدج في ٢٠٢٦ لنضع تلك الخبرة تحت علامة واحدة حديثة. عملية مرنة، أدوات حادّة، وقيادة تعرف موقع كل بولاردة في كل محطة مصرية.",
+    "pillar1.title":"خبرة قدامى، بأسلوب جديد","pillar1.desc":"يديرها أناس قضوا ٤٠ عامًا على أرصفة مصر. والآن يطبّقون ذلك على علامة بُنيت من الصفر — أدوات حديثة، عمليات أرشق، بلا أي ثقل تاريخي.",
+    "pillar2.title":"كل ميناء مصري، من اليوم الأول","pillar2.desc":"من الإسكندرية إلى العين السخنة، عمل فريقنا فيها كلها. نبدأ بعلاقات ومعرفة يحتاج معظم المنافسين عقدًا كاملًا لبنائها.",
     "pillar3.title":"الميزة المصرية","pillar3.desc":"نعمل من قناة السويس، أهم نقطة عبور بحرية في العالم. ميزة لا يستطيع أي مركز آخر تقديمها.",
-    "tl1.event":"التأسيس في مصر","tl1.detail":"أول مكتب وكالة يفتح في الإسكندرية. خدمة سفن وطواقم من اليوم الأول.",
-    "tl2.event":"شراكة دبي","tl2.detail":"تعاون شحن في جبل علي يفتح خطوطًا إلى جنوب آسيا وشبه القارة الهندية.",
-    "tl3.event":"التوسّع في قرن أفريقيا","tl3.detail":"افتتاح مكاتب في جيبوتي وعدن، وتأمين ممرّ البحر الأحمر وخليج عدن بالكامل.",
-    "tl4.event":"منصة واحدة","tl4.detail":"دمج العمليات الإقليمية في منصة لوجستية موحدة. حاويات كاملة وجزئية، بضائع مشاريع، وتوزيع داخلي.",
-    "tl5.event":"المقر المصري. انطلاق عالمي","tl5.detail":"SHB للنقل والشحن البحري تطلق علامة جديدة، ومقرًا جديدًا في مصر، والتزامًا متجدّدًا بالتميّز العالمي.",
-    "routes.eyebrow":"شبكتنا","routes.title":"موانئ استراتيجية.<br/>وصول عالمي.","routes.sub":"أربعة مراكز ترسّخ حضورنا في أهم الممرات البحرية في العالم.",
-    "port1.country":"مصر، المقر الرئيسي","port1.name":"بورسعيد والإسكندرية","port1.desc":"بوابة قناة السويس والبحر المتوسط. أبرز محطّتي حاويات في مصر، وقاعدتنا الأم.",
-    "port2.country":"الإمارات العربية المتحدة","port2.name":"جبل علي، دبي","port2.desc":"أكبر ميناء في الشرق الأوسط. فريقنا في دبي يربطك مباشرة بجنوب آسيا وشرق أفريقيا والخليج.",
-    "port3.country":"جيبوتي","port3.name":"ميناء جيبوتي","port3.desc":"المحطة الترانزيتية الأولى في قرن أفريقيا. نقطة الوصل بين البحر الأحمر والمحيط الهندي.",
-    "port4.country":"اليمن","port4.name":"ميناء عدن","port4.desc":"تاريخيًا من أنشط موانئ التزويد بالوقود والترانزيت في العالم. شراكتنا في اليمن تحافظ على هذا الإرث.",
-    "contact.eyebrow":"تواصل معنا","contact.title":"جاهز<br/><em>للشحن؟</em>","contact.desc":"حاوية كاملة، شحنة جزئية، أو مشروع متعدّد الموانئ. أخبرنا بما تحتاج. ونبني الحلّ المناسب لك.",
-    "contact.hq.label":"المقر","contact.hq.val":"مصر، الإسكندرية وبورسعيد",
-    "contact.net.label":"الشبكة","contact.net.val":"دبي · جيبوتي · عدن، اليمن",
-    "contact.ops.label":"العمليات","contact.ops.val":"٢٤/٧، ٣٦٥ يومًا في السنة",
-    "contact.email.label":"البريد","contact.quote":"نعمل في هذه المياه قبل أن يُؤسَّس معظم منافسينا.",
+    "tl1.event":"أيام أولى على الأرصفة","tl1.detail":"قيادتنا تبدأ العمل في الإسكندرية — خدمة سفن، طواقم، تعلّم كل رصيف من الأرض إلى السطح.",
+    "tl2.event":"إتقان بورسعيد","tl2.detail":"الفريق يتولّى عمليات بورسعيد — المدخل الشمالي لقناة السويس وأحد أكثر نقاط العبور ازدحامًا في العالم.",
+    "tl3.event":"سنوات البحر الأحمر","tl3.detail":"عقد كامل من العمل في العين السخنة وتجارة البحر الأحمر، وتأمين المدخل الجنوبي لقناة السويس.",
+    "tl4.event":"دمياط تنضم","tl4.detail":"الفريق يضيف دمياط — خبرة مباشرة الآن في كل ميناء تجاري مصري كبير.",
+    "tl5.event":"إطلاق سي هاربور بريدج للشحن البحري","tl5.detail":"أربعون عامًا من الممارسة تحت علامة واحدة جديدة. هويّة جديدة، منصة حديثة، ونفس الفريق الذي يدير الأرصفة منذ عقود.",
+    "routes.eyebrow":"شبكتنا","routes.title":"موانئ مصرية.<br/>وصول حول العالم.","routes.sub":"أربعة موانئ بحرية مصرية كبرى تغطّي كل السواحل، وتربط التجارة الوطنية بوجهات في أنحاء العالم.",
+    "port1.country":"مصر · المقر الرئيسي","port1.name":"الإسكندرية","port1.desc":"أكبر ميناء تجاري في مصر على البحر المتوسط. قاعدتنا الأم وبوابتنا إلى العالم — فريقنا يعمل على هذه الأرصفة منذ ١٩٨٦.",
+    "port2.country":"مصر · شمال قناة السويس","port2.name":"بورسعيد","port2.desc":"المدخل الشمالي لقناة السويس وأحد أهم مراكز الترانزيت في العالم. عمليات حاويات وترانزيت وخدمة سفن.",
+    "port3.country":"مصر · المتوسط","port3.name":"دمياط","port3.desc":"محطة حاويات مصرية حديثة على المتوسط. أرصفة عميقة، دوران سريع، واتصال مباشر بخطوط الملاحة الدولية.",
+    "port4.country":"مصر · البحر الأحمر","port4.name":"العين السخنة","port4.desc":"المدخل الجنوبي لقناة السويس على البحر الأحمر. بوابة مصر لخطوط التجارة العالمية شرقًا وجنوبًا، بحاويات وصبّ وتزويد بالوقود.",
+    "contact.eyebrow":"تواصل معنا","contact.title":"جاهز<br/><em>للشحن؟</em>","contact.desc":"حاوية كاملة، شحنة جزئية، أو مشروع متعدّد الموانئ في مصر. أخبرنا بما تحتاج. ونبني الحلّ المناسب لك.",
+    "contact.hq.label":"المقر","contact.hq.val":"الإسكندرية، مصر",
+    "contact.net.label":"الشبكة","contact.net.val":"الإسكندرية · بورسعيد · دمياط · العين السخنة",
+    "contact.ops.label":"العمليات","contact.ops.val":"٢٤/٧، ٣٦٥ يومًا في السنة · شحن حول العالم",
+    "contact.email.label":"البريد","contact.quote":"شركتنا جديدة. أما من يديرها، فيعملون في هذه المهنة منذ أربعين عامًا.",
     "form.fname":"الاسم الأول","form.fname.ph":"أحمد","form.lname":"اسم العائلة","form.lname.ph":"حسن",
     "form.company":"الشركة","form.company.ph":"اسم شركتك","form.email":"البريد الإلكتروني","form.email.ph":"you@company.com",
-    "form.service":"الخدمة المطلوبة","form.service.ph":"اختر خدمة...","form.route":"المنشأ → الوجهة","form.route.ph":"مثال: الإسكندرية → جبل علي",
+    "form.service":"الخدمة المطلوبة","form.service.ph":"اختر خدمة...","form.route":"المنشأ → الوجهة","form.route.ph":"مثال: الإسكندرية → حول العالم",
     "form.msg":"تفاصيل إضافية","form.msg.ph":"نوع البضاعة، الحجم، الموعد...","form.submit":"إرسال الطلب ◈","form.success":"تم استلام طلبك. سنتواصل معك خلال يوم عمل واحد.",
     "acronym.words":"بحر · مرفأ · جسر",
-    "acronym.tagline":"جسر يربط موانئ العالم",
-    "footer.tagline":"١١٢+ سنة في عرض البحر. من مصر إلى العالم. عبر البحر الأحمر والمتوسط وكل ما بينهما.",
+    "acronym.tagline":"جسر يربط موانئ مصر بالعالم بحرًا",
+    "footer.tagline":"شركة جديدة. طاقم خبير. أربعون عامًا على ساحل مصر، تحت علامة واحدة حديثة. من كل ميناء مصري إلى العالم.",
     "footer.services":"الخدمات","footer.network":"الشبكة","footer.company":"الشركة",
-    "footer.copy":"© ٢٠٢٦ SHB للنقل والشحن البحري. جميع الحقوق محفوظة. مصر · دبي · جيبوتي · اليمن",
+    "footer.copy":"© ٢٠٢٦ سي هاربور بريدج للشحن البحري. جميع الحقوق محفوظة. الإسكندرية · بورسعيد · دمياط · العين السخنة · مصر",
     "footer.privacy":"سياسة الخصوصية","footer.terms":"شروط الخدمة",
-    "ticker":["شحن بحري","بورسعيد","الإسكندرية","جبل علي، دبي","ميناء جيبوتي","عدن، اليمن","تخليص جمركي","شحن صبّ","لوجستيات حاويات","ممر البحر الأحمر","خطوط المتوسط","١١٢+ سنة في عرض البحر","وكالة خطوط ملاحية","تغيير طواقم","تزويد بالوقود"]
+    "ticker":["شحن بحري","الإسكندرية","بورسعيد","دمياط","العين السخنة","قناة السويس","تخليص جمركي","شحن صبّ","لوجستيات حاويات","ممر البحر الأحمر","خطوط المتوسط","٤٠+ سنة في عرض البحر","وكالة خطوط ملاحية","تغيير طواقم","تزويد بالوقود"]
   }
 };
 
@@ -1353,7 +1322,7 @@ const SERVICE_ICONS = [
   <path id="route7" d="M110 42 Q140 28 168 46" fill="none"/>
   <!-- labels -->
   <text x="104" y="36" font-family="Space Grotesk,sans-serif" font-size="6.5" fill="#0066ff" text-anchor="middle" opacity="0.8">EGY</text>
-  <text x="175" y="41" font-family="Space Grotesk,sans-serif" font-size="6.5" fill="#00d4ff" text-anchor="middle" opacity="0.8">DXB</text>
+  <text x="175" y="41" font-family="Space Grotesk,sans-serif" font-size="6.5" fill="#00d4ff" text-anchor="middle" opacity="0.8">WORLD</text>
 </svg>`,
 
 // 8. Port Agency — gantry crane with moving trolley
@@ -1524,20 +1493,20 @@ function buildServices() {
 
 const TICKER_COLORS = [
   '#0066ff', // Ocean Freight        — Royal Blue
-  '#d4a73c', // Port Said             — Heritage Gold (Egypt)
-  '#d4a73c', // Alexandria            — Heritage Gold (Egypt)
-  '#0d8a4a', // Jebel Ali — Dubai     — Emerald (UAE)
-  '#5cb1e0', // Port of Djibouti      — Sky Blue
-  '#ce1126', // Aden — Yemen          — Signal Red
-  '#7e2f5e', // Customs Clearance     — Plum
-  '#f5b942', // Bulk Cargo            — Amber
-  '#e85a4f', // Container Logistics   — Coral
-  '#7d1e3f', // Red Sea Corridor      — Burgundy
-  '#00a8c8', // Mediterranean Routes  — Aqua
-  '#b8893d', // 112+ Years            — Sepia Gold
-  '#3949ab', // Liner Agency          — Indigo
-  '#ff7a6c', // Crew Changes          — Peach
-  '#c2410c'  // Bunkering             — Burnt Sienna
+  '#d4a73c', // Alexandria           — Heritage Gold (Egypt)
+  '#d4a73c', // Port Said            — Heritage Gold (Egypt)
+  '#0d8a4a', // Damietta             — Emerald (Egypt)
+  '#5cb1e0', // Ain Sokhna           — Sky Blue (Red Sea)
+  '#ce1126', // Suez Canal           — Signal Red
+  '#7e2f5e', // Customs Clearance    — Plum
+  '#f5b942', // Bulk Cargo           — Amber
+  '#e85a4f', // Container Logistics  — Coral
+  '#7d1e3f', // Red Sea Corridor     — Burgundy
+  '#00a8c8', // Mediterranean Routes — Aqua
+  '#b8893d', // 40+ Years            — Sepia Gold
+  '#3949ab', // Liner Agency         — Indigo
+  '#ff7a6c', // Crew Changes         — Peach
+  '#c2410c'  // Bunkering            — Burnt Sienna
 ];
 function buildTicker() {
   const wrap = document.getElementById('ticker-inner');
@@ -1638,13 +1607,24 @@ function handleSubmit(e) {
 }
 
 // ── MOBILE MENU ─────────────────────────────────
-let menuOpen = false;
-function toggleMenu() {
-  menuOpen = !menuOpen;
+// .nav-links is portalled out to <body> when opening so its position:fixed
+// resolves against the viewport. (#main-nav has backdrop-filter, which makes
+// it a containing block for fixed descendants — without portalling, the menu
+// gets clipped to the 72px nav strip.)
+function toggleMenu(force) {
   const links = document.querySelector('.nav-links');
-  links.style.cssText = menuOpen
-    ? 'display:flex;flex-direction:column;position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(244,248,255,0.97);backdrop-filter:blur(20px);padding:40px;gap:24px;z-index:999;'
-    : '';
+  const navInner = document.querySelector('.nav-inner');
+  const burger = document.querySelector('.hamburger');
+  const open = typeof force === 'boolean' ? force : !links.classList.contains('is-open');
+  if (open) {
+    document.body.appendChild(links);
+  } else if (links.parentElement === document.body) {
+    navInner.insertBefore(links, burger);
+  }
+  links.classList.toggle('is-open', open);
+  burger.classList.toggle('is-open', open);
+  document.body.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 // ── INIT ────────────────────────────────────────
@@ -1653,6 +1633,15 @@ window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
   document.querySelectorAll('[data-count]').forEach(el => statObserver.observe(el));
   document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 80);
+
+  // Close mobile menu when a nav link is tapped
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => toggleMenu(false));
+  });
+  // Close mobile menu when viewport returns to desktop width
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 600) toggleMenu(false);
+  });
 });
 </script>
 </body>
