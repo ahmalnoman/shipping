@@ -1446,7 +1446,7 @@ const SERVICE_ICONS = [
 ];
 
 // ── LANGUAGE ENGINE ────────────────────────────
-let currentLang = localStorage.getItem('lang') || 'en';
+let currentLang = 'en';
 
 function t(key) { return T[currentLang][key] || T['en'][key] || key; }
 
@@ -1551,7 +1551,6 @@ function applyTranslations() {
 
 function setLang(lang) {
   currentLang = lang;
-  localStorage.setItem('lang', lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.body.style.fontFamily = lang === 'ar' ? "'IBM Plex Sans Arabic', sans-serif" : "'Space Grotesk', sans-serif";
